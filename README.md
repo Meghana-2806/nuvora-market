@@ -85,7 +85,7 @@ nuvora-market/
 └── README.md
 ```
 
-## 🎤 Viva cheat-sheet
+
 
 - **Data storage design:** business records, temporary cart/session state, and real-time rankings are managed efficiently for their different needs.
 - **Why this cart structure?** Each user has a separate cart, and item quantities can be updated efficiently.
