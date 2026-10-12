@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Dashboard — Nuvora</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<main class="container customer-dashboard" style="padding-top:26px;padding-bottom:48px">
+  <section class="customer-welcome">
+    <div><span class="eyebrow">YOUR NUVORA SPACE</span><h1>Welcome back, <span id="customerName">there</span>.</h1><p>Everything you need for a smoother shopping experience, all in one place.</p></div>
+    <a class="btn" href="/shop.html">Explore the store <span aria-hidden="true">→</span></a>
+  </section>
+  <div class="customer-stats" id="customerStats"><div class="customer-stat"><small>Loading your account…</small><b>—</b></div></div>
+  <div class="customer-columns">
+    <section class="section">
+      <div class="section-head"><div><h3>Recent orders</h3><small>Only orders belonging to your account are shown here.</small></div><a class="customer-text-link" href="/orders.html">View all orders →</a></div>
+      <div id="recentOrders"><div class="customer-empty">Loading your orders…</div></div>
+    </section>
+    <aside class="section account-card">
+      <div class="account-avatar" id="customerInitial">N</div><span class="eyebrow">YOUR ACCOUNT</span><h3 id="profileName">Customer</h3><p id="profileEmail">—</p><div class="account-detail"><small>City</small><b id="profileCity">Not set</b></div><div class="account-detail"><small>Account type</small><b>Customer</b></div><button class="btn dark block" id="signOutBtn" type="button">Sign out</button>
+    </aside>
+  </div>
+</main>
+<style>
+.customer-welcome{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:30px 32px;background:linear-gradient(120deg,#173b3a,#28605c 75%,#397b70);border-radius:20px;color:white;box-shadow:0 12px 30px rgba(23,59,58,.12)}
+.customer-welcome .eyebrow,.account-card .eyebrow{font-size:10px;font-weight:800;letter-spacing:.16em;color:#f0b09c}.customer-welcome h1{font-size:clamp(25px,3vw,36px);letter-spacing:-.04em;margin:7px 0}.customer-welcome p{color:#d4e4df}.customer-welcome .btn{white-space:nowrap}.customer-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:18px 0}.customer-stat{background:white;border:1px solid var(--line);border-radius:15px;padding:21px 22px;box-shadow:var(--shadow)}.customer-stat small{color:var(--muted);font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}.customer-stat b{display:block;font-size:27px;margin-top:7px;letter-spacing:-.03em}.customer-columns{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(250px,.8fr);gap:18px;align-items:start}.customer-text-link{color:var(--green);font-weight:700;font-size:13px}.customer-empty{padding:28px 10px;text-align:center;color:var(--muted)}.customer-order{padding:15px 0;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:14px}.customer-order:first-child{border-top:0}.customer-order b{display:block}.customer-order small{color:var(--muted)}.customer-order .status{margin-top:5px}.account-card{text-align:center;padding:25px}.account-avatar{width:64px;height:64px;display:grid;place-items:center;border-radius:20px;background:#e3eee8;color:#245c4b;font-size:25px;font-weight:800;margin:0 auto 15px}.account-card h3{margin:5px 0}.account-card>p{color:var(--muted);overflow-wrap:anywhere}.account-detail{display:flex;justify-content:space-between;text-align:left;border-top:1px solid var(--line);padding:12px 0;margin-top:6px}.account-detail small{color:var(--muted)}.account-card .btn{margin-top:12px}
+@media(max-width:760px){.customer-welcome{align-items:flex-start;flex-direction:column;padding:24px}.customer-stats{grid-template-columns:1fr}.customer-columns{grid-template-columns:1fr}}
+</style>
+<script src="/js/common.js"></script>
+<script>
+SS.mountLayout('customer-dashboard');
+async function loadCustomerDashboard(){
+  const recent=SS.$('#recentOrders');
+  try{
+    const {user}=await SS.api('/auth/me');
+    if(!user||user.role!=='customer'){location.replace('/');return;}
+    SS.$('#customerName').textContent=user.name.split(' ')[0];
+    SS.$('#profileName').textContent=user.name;
+    SS.$('#profileEmail').textContent=user.email;
+    SS.$('#profileCity').textContent=user.city||'Not set';
+    SS.$('#customerInitial').textContent=(user.name||'N').trim().charAt(0).toUpperCase();
+    const [orders,summary]=await Promise.all([SS.api('/orders'),SS.api('/orders/summary')]);
+    SS.$('#customerStats').innerHTML=[['Orders placed',summary.orderCount],['Total spent',SS.inr2(summary.totalSpent)],['Latest order',summary.latestOrder?new Date(summary.latestOrder).toLocaleDateString('en-IN',{day:'numeric',month:'short'}):'—']].map(([label,value])=>`<div class="customer-stat"><small>${SS.esc(label)}</small><b>${SS.esc(value)}</b></div>`).join('');
+    if(!orders.length){recent.innerHTML='<div class="customer-empty"><div style="font-size:34px;margin-bottom:8px">▧</div><b>No orders yet</b><p style="margin:6px 0 14px">Your first great find is waiting.</p><a class="btn" href="/shop.html">Start shopping</a></div>';return;}
+    recent.innerHTML=orders.slice(0,5).map(o=>`<div class="customer-order"><div><b>${SS.esc(o.orderNo)}</b><small>${new Date(o.createdAt).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})} · ${o.items.reduce((n,i)=>n+i.qty,0)} item(s)</small><br><span class="status ${SS.esc(o.status)}">${SS.esc(o.status)}</span></div><b>${SS.inr2(o.total)}</b></div>`).join('');
+  }catch(e){if(e.status===401||e.status===403){location.replace('/');return;}recent.innerHTML=`<div class="customer-empty">${SS.esc(e.message||'Could not load your account.')}</div>`;}
+}
+SS.$('#signOutBtn').addEventListener('click',async()=>{try{await SS.api('/auth/logout',{method:'POST'});}finally{location.replace('/');}});
+loadCustomerDashboard();
+</script>
+</body></html>

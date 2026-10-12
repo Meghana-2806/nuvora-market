@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Welcome to Nuvora | Sign in or create an account</title>
+<meta name="description" content="Sign in to Nuvora or create your customer or administrator account.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/auth.css">
+</head>
+<body>
+<div class="auth-shell">
+  <section class="brand-panel">
+    <a class="brand" href="/"><span class="brand-icon">N</span><span>Nuvora<span class="brand-dot">.</span></span></a>
+    <div class="brand-copy"><span class="overline">A MORE THOUGHTFUL WAY TO SHOP</span><h1>Good finds.<br><em>Better everyday.</em></h1><p>Discover the pieces that make everyday life feel a little more considered — all in one place.</p>
+      <div class="feature-list"><div><span class="feature-icon">✦</span><span><b>Curated for you</b><small>Everyday essentials, made easy to find.</small></span></div><div><span class="feature-icon">↗</span><span><b>A smoother experience</b><small>Simple shopping, clear orders, no fuss.</small></span></div></div>
+    </div>
+    <div class="panel-bottom"><span class="status-dot"></span> Thoughtfully selected. Securely delivered.<span class="panel-year">© 2026 Nuvora</span></div>
+    <div class="orb orb-one"></div><div class="orb orb-two"></div>
+  </section>
+  <main class="form-panel">
+    <div class="mobile-brand"><span class="brand-icon">N</span><span>Nuvora<span class="brand-dot">.</span></span></div>
+    <div class="auth-card">
+      <div class="welcome"><span class="eyebrow">WELCOME TO NUVORA</span><h2 id="heading">Welcome back</h2><p id="subheading">Sign in to pick up where you left off.</p></div>
+      <div class="role-switch" aria-label="Choose account type"><button class="role-btn active" data-role="customer" type="button"><span>♧</span> Customer</button><button class="role-btn" data-role="admin" type="button"><span>▣</span> Administrator</button></div>
+      <div class="mode-switch"><button class="mode-btn active" data-mode="login" type="button">Sign in</button><button class="mode-btn" data-mode="register" type="button">Create account</button></div>
+      <div id="message" class="message" role="alert" aria-live="polite"></div>
+      <form id="authForm" novalidate>
+        <div class="field" id="nameField" hidden><label for="name">Full name</label><input id="name" name="name" autocomplete="name" placeholder="Your full name"></div>
+        <div class="field"><label for="email">Email address</label><input id="email" name="email" type="email" autocomplete="username" placeholder="you@example.com" required></div>
+        <div class="field"><div class="label-row"><label for="password">Password</label><span id="passwordHint">Keep your account secure</span></div><input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required minlength="8"></div>
+        <div class="field" id="cityField" hidden><label for="city">Your city</label><select id="city" name="city"><option value="Vijayawada">Vijayawada</option><option>Hyderabad</option><option>Bengaluru</option><option>Chennai</option><option>Mumbai</option><option>Delhi</option><option>Pune</option><option>Kolkata</option></select></div>
+        <div class="field" id="setupKeyField" hidden><label for="setupKey">Admin setup key</label><input id="setupKey" name="setupKey" type="password" autocomplete="off" placeholder="Provided by the project owner"><small class="field-note">Admin accounts can only be created with the setup key from the server configuration.</small></div>
+        <button class="submit-btn" id="submitBtn" type="submit">Sign in <span>→</span></button>
+      </form>
+      <div class="secure-note"><span>⌑</span> Your account is protected with secure password hashing and server-side sessions.</div>
+      <div class="bottom-link" id="bottomLink">New to Nuvora? <button type="button" data-mode="register">Create an account</button></div>
+      <a class="guest-link" href="/shop.html">Explore the store <span>→</span></a>
+    </div>
+    <footer class="form-footer"><span>Designed for everyday living.</span><span><a href="/api/health">System status</a> · Privacy-first sessions</span></footer>
+  </main>
+</div>
+<script src="/js/auth.js"></script>
+</body></html>

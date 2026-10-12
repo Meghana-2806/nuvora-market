@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nuvora — Online Shopping for Electronics, Fashion, Books & more</title>
+<meta name="description" content="Nuvora — thoughtful finds for everyday living.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<main class="container">
+  <div class="hero" id="hero" aria-label="Featured offers">
+    <div class="promo" style="background:linear-gradient(120deg,#173b3a,#28605c 65%,#e77b63 160%)">
+      <p class="eyebrow">THE GOOD FINDS EVENT</p><h2>Little upgrades.<br>Big everyday joy.</h2>
+      <p>Discover up to 60% off across electronics, fashion and home. Use <code>SAVE10</code> for an extra 10% off.</p>
+      <a class="btn" href="#catalog">Shop now</a><span class="big-emoji">🎁</span>
+    </div>
+    <div class="promo sm" style="background:linear-gradient(135deg,#2c6b68,#57958b)"><h2>Free delivery above ₹499</h2><p>Across 8 cities</p><span class="big-emoji">🚚</span></div>
+    <div class="promo sm" style="background:linear-gradient(135deg,#a95449,#e79a83)"><h2>₹100 off ₹999+</h2><p>Code <code>WELCOME100</code></p><span class="big-emoji">🏷️</span></div>
+  </div>
+
+  <section class="section" id="topSection">
+    <div class="section-head"><h3>Trending now</h3><small>Customer favourites, ranked live</small></div>
+    <div class="top-strip" id="topStrip"></div>
+  </section>
+
+  <section class="catalog" id="catalog">
+    <aside class="filters">
+      <h4>Shop by category</h4>
+      <div id="catFilter"></div>
+      <h4>Set your budget · ₹</h4>
+      <div class="range"><input id="minP" type="number" min="0" placeholder="Min"><span>–</span><input id="maxP" type="number" min="0" placeholder="Max"></div>
+      <button class="btn dark block" style="margin-top:10px;padding:8px" id="applyPrice">Go</button>
+      <button class="link" style="margin:10px 0 0;display:block" id="resetFilters">Reset all filters</button>
+    </aside>
+    <div>
+      <div class="toolbar">
+        <div id="resultInfo" style="font-weight:600"></div>
+        <select id="sort">
+          <option value="featured">Sort: Featured</option><option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option><option value="rating">Avg. Customer Review</option><option value="newest">Newest Arrivals</option>
+        </select>
+      </div>
+      <div class="grid" id="grid"></div>
+      <div class="pager" id="pager"></div>
+    </div>
+  </section>
+</main>
+
+<script src="/js/common.js"></script>
+<script src="/js/store.js"></script>
+</body>
+</html>

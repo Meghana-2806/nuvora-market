@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your Orders — Nuvora</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<main class="container" style="padding-top:22px;max-width:980px">
+  <div class="section-head"><h2 style="font-size:28px">Your Orders</h2></div>
+  <div id="orders"></div>
+</main>
+<script src="/js/common.js"></script>
+<script>
+SS.mountLayout('orders');
+
+async function load() {
+  const box = SS.$('#orders');
+  try {
+    const orders = await SS.api('/orders');
+    if (!orders.length) {
+      box.innerHTML = `<div class="section empty"><div class="em">📦</div><h3>No orders yet</h3><p>When you place an order it will show up here.</p><br><a class="btn" href="/shop.html">Start shopping</a></div>`;
+      return;
+    }
+    box.innerHTML = orders.map((o) => `
+      <div class="order">
+        <div class="order-head">
+          <div>ORDER PLACED<b>${new Date(o.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</b></div>
+          <div>TOTAL<b>${SS.inr2(o.total)}</b></div>
+          <div>SHIP TO<b>${SS.esc(o.shippingAddress.city)}</b></div>
+          <div>PAYMENT<b>${SS.esc(o.paymentMethod)}</b></div>
+          <div style="margin-left:auto;text-align:right">ORDER # ${SS.esc(o.orderNo)}<b><span class="status ${o.status}">${o.status}</span></b></div>
+        </div>
+        <div class="order-body">
+          ${o.items.map((i) => `<div class="oi"><div class="th">${i.emoji || '📦'}</div>
+            <div style="flex:1"><b>${SS.esc(i.title)}</b><div style="color:var(--muted)">Qty ${i.qty} • ${SS.inr(i.price)} each • ${SS.esc(i.category)}</div></div>
+            <b>${SS.inr(i.price * i.qty)}</b></div>`).join('')}
+          ${o.coupon ? `<div class="hint ok" style="margin-top:6px">Coupon ${SS.esc(o.coupon)} saved you ${SS.inr2(o.discount)}</div>` : ''}
+        </div>
+      </div>`).join('');
+  } catch (e) {
+    if (e.status === 401) {
+      box.innerHTML = `<div class="section empty"><div class="em">🔐</div><h3>Sign in to view your orders</h3><br><button class="btn" onclick="SS.openModal('authModal')">Sign in</button></div>`;
+    } else box.innerHTML = `<div class="section empty">${SS.esc(e.message)}</div>`;
+  }
+}
+window.onAuthChange = load;
+load();
+</script>
+</body>
+</html>
